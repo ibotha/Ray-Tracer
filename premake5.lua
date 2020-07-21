@@ -22,8 +22,8 @@ project "olcPixelGameEngine"
     kind "StaticLib"
     language "C"
     
-	targetdir (localdir .. "bin/" .. outputdir .. "/%{prj.name}")
-    objdir (localdir .. "bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files
 	{
