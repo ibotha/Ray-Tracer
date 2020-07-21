@@ -1,11 +1,10 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include "Ray.h"
+#include "Object.h"
 
-class Sphere {
+class Sphere : public Object {
 public:
 	Sphere(const glm::vec3 &pos, float size);
 
-	bool Intersect(const Ray& ray);
+	Intersection Intersect(const Ray& ray) override;
 };

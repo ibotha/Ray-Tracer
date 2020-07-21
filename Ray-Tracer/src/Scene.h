@@ -1,6 +1,6 @@
 #pragma once
 
-struct Scene
+class Scene
 {
-
+public:
 };
