@@ -15,7 +15,9 @@ public:
 	inline olc::Sprite& GetRender() { return m_Render; }
 	inline Scene& GetScene() { return m_Scene; }
 
-	olc::Pixel Trace(const Ray& ray);
+	glm::vec3 Trace(const Ray& ray, int depth = 0);
+
+	int max_depth = 3;
 
 private:
 	Scene m_Scene;

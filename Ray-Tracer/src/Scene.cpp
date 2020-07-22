@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 Scene::Scene()
-	:camera({0, 0, 0}, {0, 0, 0})
+	:camera(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), 60.0f)
 {
 }
 

@@ -26,11 +26,13 @@ Intersection Sphere::Intersect(const Ray& ray)
 	if (discriminant > 0)
 	{
 		glm::vec3 hit_location;
-		i.hit = true;
 		i.dist = (-b - glm::sqrt(discriminant)) / (2.0f * a);
+		i.hit = i.dist > 0;
+		if (!i.hit)
+			return i;
 		hit_location = local.origin + local.direction * i.dist;
 		i.location = transform.ToWorldSpace(hit_location);
-		i.normal = glm::normalize(transform.ToWorldSpaceDir(hit_location));
+		i.SetNormal(ray, glm::normalize(transform.ToWorldSpaceDir(hit_location)));
 	}
 	else
 		i.hit = false;

@@ -41,17 +41,19 @@ Transform::Transform(const glm::mat4& base)
 
 Ray Transform::ToObjectSpace(const Ray& ray) const
 {
-	Ray ret;
-	ret.origin = ToObjectSpace(ray.origin);
-	ret.direction = ToObjectSpaceDir(ray.direction);
+	Ray ret(
+		ToObjectSpace(ray.origin),
+		ToObjectSpaceDir(ray.direction)
+	);
 	return ret;
 }
 
 Ray Transform::ToWorldSpace(const Ray& ray) const
 {
-	Ray ret;
-	ret.origin = ToWorldSpace(ray.origin);
-	ret.direction = ToWorldSpaceDir(ray.direction);
+	Ray ret(
+		ToWorldSpace(ray.origin),
+		ToWorldSpaceDir(ray.direction)
+	);
 	return ret;
 }
 

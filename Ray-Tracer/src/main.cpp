@@ -17,11 +17,12 @@ public:
 	{
 		//populate scene here
 		tracer = new RayTracer(ScreenWidth(), ScreenHeight());
-		tracer->GetScene().camera = Camera({ 0, 0, 3 }, { 0, 0, 0 });
-		tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(2, 2, 2))));
-		tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 0, 2), glm::vec3(0, 0, 0), glm::vec3(1, 1, 2))));
-		tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 2, 0), glm::vec3(0, 0, 0), glm::vec3(1, 2, 1))));
-		tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(2, 0, 0), glm::vec3(0, 0, 0), glm::vec3(2, 1, 1))));
+		tracer->GetScene().camera = Camera({ 0, 0, 5 }, { 0, 0, 0 });
+		tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1))));
+		tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, -41, 0), glm::vec3(0, 0, 0), glm::vec3(40, 40, 40))));
+		//tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 0, 2), glm::vec3(0, 0, 0), glm::vec3(1, 1, 2))));
+		//tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 2, 0), glm::vec3(0, 0, 0), glm::vec3(1, 2, 1))));
+		//tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(2, 0, 0), glm::vec3(0, 0, 0), glm::vec3(2, 1, 1))));
 		tracer->render();
 		DrawSprite({0, 0}, &tracer->GetRender());
 		return true;
@@ -32,7 +33,7 @@ public:
 		// called once per frame
 		if (GetKey(olc::SPACE).bPressed)
 		{
-			static glm::vec3 pos = {0, 0, 3};
+			static glm::vec3 pos = {0, 0, 5};
 			static glm::vec3 rot = { 0, 0, 0 };
 			if (GetKey(olc::W).bHeld)
 				pos.z -= 1;
@@ -49,7 +50,7 @@ public:
 			if (GetKey(olc::UP).bHeld)
 				rot.x += 1;
 			if (GetKey(olc::DOWN).bHeld)
-				rot.y -= 1;
+				rot.x -= 1;
 			tracer->GetScene().camera = Camera(pos, rot);
 			// If we have a scene file we can re-read it and re-render here
 			tracer->render();
