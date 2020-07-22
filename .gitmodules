@@ -1,0 +1,6 @@
+[submodule "Ray-Tracer/vendor/olcPixelGameEngine"]
+	path = Ray-Tracer/vendor/olcPixelGameEngine
+	url = https://github.com/OneLoneCoder/olcPixelGameEngine.git
+[submodule "Ray-Tracer/vendor/glm"]
+	path = Ray-Tracer/vendor/glm
+	url = https://github.com/g-truc/glm.git
