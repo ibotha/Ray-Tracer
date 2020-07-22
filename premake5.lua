@@ -16,23 +16,6 @@ IncludeDir = {}
 IncludeDir["olcPixelGameEngine"] = "vendor/olcPixelGameEngine"
 IncludeDir["glm"] = "vendor/glm"
 
-group "Dependencies"
-project "olcPixelGameEngine"
-	localdir = "Ray-Tracer/vendor/olcPixelGameEngine/"
-    kind "StaticLib"
-    language "C"
-    
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		localdir .. "olcExampleProgram.cpp"
-    }
-    filter { "system:windows", "configurations:Release" }
-        buildoptions "/MT"
-group ""
-
 project "Ray-Tracer"
 	location "Ray-Tracer"
 	kind "ConsoleApp"
@@ -54,11 +37,6 @@ project "Ray-Tracer"
 		"%{prj.name}/src",
 		"%{prj.name}/%{IncludeDir.olcPixelGameEngine}",
 		"%{prj.name}/%{IncludeDir.glm}"
-	}
-
-	links
-	{
-		"olcPixelGameEngine"
 	}
 	
 	filter "system:windows"

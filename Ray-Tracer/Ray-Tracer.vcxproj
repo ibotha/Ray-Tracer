@@ -145,13 +145,8 @@
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\RayTracer.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Scene.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\olcPixelGameEngine.vcxproj">
-      <Project>{1542DB43-0126-9C99-6A86-96EC5689861B}</Project>
-    </ProjectReference>
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

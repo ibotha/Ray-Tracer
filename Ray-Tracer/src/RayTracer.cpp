@@ -42,9 +42,9 @@ olc::Pixel RayTracer::Trace(const Ray& ray)
 
 	// if (i.hit)
 		return olc::Pixel(
-			(ray.direction.x * 0.5 + 0.5) * 255,
-			(ray.direction.y * 0.5 + 0.5) * 255,
-			(ray.direction.z * 0.5 + 0.5) * 255
+			0,//(ray.direction.x * 0.5 + 0.5) * 255,
+			0,//(ray.direction.y * 0.5 + 0.5) * 255,
+			0//(ray.direction.z * 0.5 + 0.5) * 255
 		);
 	//else
 	//	return olc::Pixel(
