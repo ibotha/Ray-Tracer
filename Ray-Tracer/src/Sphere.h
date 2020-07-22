@@ -5,6 +5,8 @@
 class Sphere : public Object {
 public:
 	Sphere(const glm::vec3 &pos, float size);
+	Sphere(const Transform& _transform);
+	virtual ~Sphere() {}
 
-	Intersection Intersect(const Ray& ray) override;
+	virtual Intersection Intersect(const Ray& ray) override;
 };

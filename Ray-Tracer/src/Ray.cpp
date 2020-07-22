@@ -1,6 +1,6 @@
 #include "Ray.h"
 
-Ray Ray::Transform(const glm::mat4& matrix)
+Ray Ray::Transform(const glm::mat4& matrix) const
 {
 	Ray ret;
 	glm::vec4 tDirection = glm::vec4(direction.x, direction.y, direction.z, 0.0f) * matrix;

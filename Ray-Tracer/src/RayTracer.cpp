@@ -5,13 +5,13 @@
 #include "Ray.h"
 
 
-RayTracer::RayTracer(const Scene& scene, int32_t w, int32_t h)
-	:m_Scene(scene), m_Render(w, h)
+RayTracer::RayTracer(int32_t w, int32_t h)
+	:m_Render(w, h)
 {}
 
 void RayTracer::render()
 {
-	float FOV = glm::radians(90.0f);
+	float FOV = m_Scene.camera.FOV;
 	const float AR = m_Render.height / static_cast<float>(m_Render.width);
 	const float	invheight = 1.0f / static_cast<float>(m_Render.height);
 	const float	invwidth = 1.0f / static_cast<float>(m_Render.width);
@@ -29,6 +29,7 @@ void RayTracer::render()
 				-1.0f
 			};
 			ray.Normalize();
+			ray = m_Scene.camera.transform.ToWorldSpace(ray);
 
 			m_Render.SetPixel(x, y, Trace(ray));
 		}
@@ -38,18 +39,18 @@ void RayTracer::render()
 // Sends a ray out into the scene and returns the color after all lighting and other calculations
 olc::Pixel RayTracer::Trace(const Ray& ray)
 {
-	//Intersection i = m_Scene.Intersect(ray);
+	Intersection i = m_Scene.Intersect(ray);
 
-	// if (i.hit)
+	if (i.hit)
 		return olc::Pixel(
-			0,//(ray.direction.x * 0.5 + 0.5) * 255,
-			0,//(ray.direction.y * 0.5 + 0.5) * 255,
-			0//(ray.direction.z * 0.5 + 0.5) * 255
+			(i.location.x * 0.5 + 0.5) * 255,
+			(i.location.y * 0.5 + 0.5) * 255,
+			(i.location.z * 0.5 + 0.5) * 255
 		);
-	//else
-	//	return olc::Pixel(
-	//		30,
-	//		30,
-	//		30
-	//	);
+	else
+		return olc::Pixel(
+			0,
+			0,
+			0
+		);
 }

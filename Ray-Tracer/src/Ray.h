@@ -8,5 +8,5 @@ struct Ray {
 
 	inline void Normalize() { direction = glm::normalize(direction); }
 
-	Ray Transform(const glm::mat4& matrix);
+	Ray Transform(const glm::mat4& matrix) const;
 };

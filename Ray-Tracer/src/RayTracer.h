@@ -8,7 +8,7 @@
 class RayTracer
 {
 public:
-	RayTracer(const Scene& scene, int32_t w, int32_t h);
+	RayTracer(int32_t w, int32_t h);
 
 	void render();
 
