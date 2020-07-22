@@ -53,8 +53,8 @@ glm::vec3 RayTracer::Trace(const Ray& ray, int depth)
 	{
 		//TODO: Get from material
 		if (depth > max_depth)
-			return glm::vec3(0);
-		glm::vec3 col = 0.5f * Trace(Ray(i.location, i.normal + random_in_unit_sphere()), depth + 1);
+			return glm::vec3(0, 0, 0);
+		glm::vec3 col = glm::vec3(0.5f, 0.2f, 0.1f) * Trace(Ray(i.location, i.normal + (random_in_unit_sphere() * 1.0f)), depth + 1);
 		return col;
 	}
 	else
