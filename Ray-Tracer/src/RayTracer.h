@@ -8,7 +8,7 @@
 class RayTracer
 {
 public:
-	RayTracer(int32_t w, int32_t h);
+	RayTracer(int32_t w, int32_t h, int max_depth = 3, int samplesPerPixel = 16);
 
 	void render();
 
@@ -17,9 +17,10 @@ public:
 
 	glm::vec3 Trace(const Ray& ray, int depth = 0);
 
-	int max_depth = 3;
 
 private:
+	int max_depth = 3;
+	float samplesPerPixel = 16;
 	Scene m_Scene;
 	olc::Sprite m_Render;
 };

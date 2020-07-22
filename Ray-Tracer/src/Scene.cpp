@@ -13,6 +13,7 @@ Intersection Scene::Intersect(const Ray& ray)
 	for (auto o : objects)
 	{
 		Intersection n = o->Intersect(ray);
+		n.object = o;
 		if (n.hit && n.dist < i.dist)
 			i = n;
 	}

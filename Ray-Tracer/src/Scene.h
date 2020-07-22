@@ -1,6 +1,7 @@
 #pragma once
 #include "Camera.h"
 #include <memory>
+#include <vector>
 #include <Object.h>
 
 class Scene

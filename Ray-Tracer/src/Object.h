@@ -13,7 +13,7 @@ public:
 
 	virtual Intersection Intersect(const Ray& ray) { return Intersection(); };
 
-	Material mat;
+	std::shared_ptr<Material> mat;
 
 	// matrix for holding translation, rotation, and scale of an object. Used for transforming to object space from world space;
 	Transform transform;

@@ -16,10 +16,16 @@ public:
 	bool OnUserCreate() override
 	{
 		//populate scene here
-		tracer = new RayTracer(ScreenWidth(), ScreenHeight());
-		tracer->GetScene().camera = Camera({ 0, 0, 5 }, { 0, 0, 0 });
-		tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1))));
-		tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, -41, 0), glm::vec3(0, 0, 0), glm::vec3(40, 40, 40))));
+		tracer = new RayTracer(ScreenWidth(), ScreenHeight(), 10, 100);
+		Scene& scene = tracer->GetScene();
+		scene.camera = Camera({ 0, 0, 5 }, { 0, 0, 0 });
+		scene.objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1))));
+		scene.objects.back()->mat = std::make_shared<Metal>(glm::vec3(0.9f, 0.9f, 0.9f), 0.0f);
+		scene.objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(3, 0, 2), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1))));
+		scene.objects.back()->mat = std::make_shared<Metal>(glm::vec3(0.9f, 0.6f, 0.5f), 0.0f);
+		scene.objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0.5f, -0.5f, 2), glm::vec3(0, 0, 0), glm::vec3(0.5f, 0.5f, 0.5f))));
+		scene.objects.back()->mat = std::make_shared<Dielectric>(glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, 1.5f);
+		scene.objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, -41, 0), glm::vec3(0, 0, 0), glm::vec3(40, 40, 40))));
 		//tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 0, 2), glm::vec3(0, 0, 0), glm::vec3(1, 1, 2))));
 		//tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 2, 0), glm::vec3(0, 0, 0), glm::vec3(1, 2, 1))));
 		//tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(2, 0, 0), glm::vec3(0, 0, 0), glm::vec3(2, 1, 1))));
@@ -67,6 +73,6 @@ private:
 int main()
 {
 	App app;
-	if (app.Construct(480, 360, 1, 1))
+	if (app.Construct(720, 480, 1, 1))
 		app.Start();
 }

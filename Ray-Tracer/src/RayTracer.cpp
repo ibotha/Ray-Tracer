@@ -5,8 +5,8 @@
 #include "Ray.h"
 #include "Random.h"
 
-RayTracer::RayTracer(int32_t w, int32_t h)
-	:m_Render(w, h)
+RayTracer::RayTracer(int32_t w, int32_t h, int _max_depth, int _samplesPerPixel)
+	:m_Render(w, h), max_depth(_max_depth), samplesPerPixel(_samplesPerPixel)
 {}
 
 void RayTracer::render()
@@ -21,7 +21,6 @@ void RayTracer::render()
 	{
 		for (int y = 0; y < m_Render.height; y++)
 		{
-			constexpr float samplesPerPixel = 16.0f;
 			glm::vec3 colour = {0, 0, 0};
 			for (int i = 0; i < samplesPerPixel; i++)
 			{
@@ -49,12 +48,14 @@ glm::vec3 RayTracer::Trace(const Ray& ray, int depth)
 {
 	Intersection i = m_Scene.Intersect(ray);
 
-	if (i.hit && i.dist > 0.0001f)
+	if (i.hit && i.dist > 0.000001f)
 	{
 		//TODO: Get from material
-		if (depth > max_depth)
+		Ray n;
+		glm::vec3 attenuation;
+		if (depth > max_depth || !i.object->mat->scatter(ray, i, attenuation, n))
 			return glm::vec3(0, 0, 0);
-		glm::vec3 col = glm::vec3(0.5f, 0.2f, 0.1f) * Trace(Ray(i.location, i.normal + (random_in_unit_sphere() * 1.0f)), depth + 1);
+		glm::vec3 col = attenuation * Trace(n, depth + 1);
 		return col;
 	}
 	else
