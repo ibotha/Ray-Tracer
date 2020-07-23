@@ -48,7 +48,7 @@ glm::vec3 RayTracer::Trace(const Ray& ray, int depth)
 {
 	Intersection i = m_Scene.Intersect(ray);
 
-	if (i.hit && i.dist > 0.000001f)
+	if (i.hit)
 	{
 		//TODO: Get from material
 		Ray n;

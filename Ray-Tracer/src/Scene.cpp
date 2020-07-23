@@ -14,7 +14,7 @@ Intersection Scene::Intersect(const Ray& ray)
 	{
 		Intersection n = o->Intersect(ray);
 		n.object = o;
-		if (n.hit && n.dist < i.dist)
+		if (n.hit && n.dist < i.dist && n.dist > 0.0001f)
 			i = n;
 	}
 	return i;
