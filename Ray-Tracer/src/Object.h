@@ -11,7 +11,7 @@ public:
 	Object(const Transform& transform);
 	virtual ~Object() {}
 
-	virtual Intersection Intersect(const Ray& ray) { return Intersection(); };
+	virtual Intersection Intersect(const Ray& ray, float min, float max) { return Intersection(); };
 
 	std::shared_ptr<Material> mat;
 

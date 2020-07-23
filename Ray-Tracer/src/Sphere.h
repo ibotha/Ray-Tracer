@@ -8,5 +8,8 @@ public:
 	Sphere(const Transform& _transform);
 	virtual ~Sphere() {}
 
-	virtual Intersection Intersect(const Ray& ray) override;
+	glm::vec3 pos;
+	float radius;
+
+	virtual Intersection Intersect(const Ray& ray, float min, float max) override;
 };

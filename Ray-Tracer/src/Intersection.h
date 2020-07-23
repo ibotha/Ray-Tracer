@@ -11,7 +11,7 @@ struct Intersection
 	glm::vec3 location = glm::vec3(0, 0, 0);
 	glm::vec3 normal = glm::vec3(0, 1, 0);
 	bool hit = false;
-	bool inner_face = false;
+	bool outer_face = false;
 
 	void SetNormal(const Ray& ray, const glm::vec3& outward_normal);
 };

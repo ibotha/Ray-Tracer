@@ -21,6 +21,7 @@ Transform::Transform(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3
 		otw[1][0], otw[1][1], otw[1][2],
 		otw[2][0], otw[2][1], otw[2][2]
 	};
+	normalMat = glm::inverse(glm::transpose(otwDir));
 }
 
 Transform::Transform(const glm::mat4& base)
@@ -37,6 +38,7 @@ Transform::Transform(const glm::mat4& base)
 		otw[1][0], otw[1][1], otw[1][2],
 		otw[2][0], otw[2][1], otw[2][2]
 	};
+	normalMat = glm::transpose(wtoDir);
 }
 
 Ray Transform::ToObjectSpace(const Ray& ray) const
@@ -65,6 +67,11 @@ glm::vec3 Transform::ToObjectSpaceDir(const glm::vec3& dir) const
 glm::vec3 Transform::ToWorldSpaceDir(const glm::vec3& dir) const
 {
 	return otwDir * dir;
+}
+
+glm::vec3 Transform::ToWorldSpaceNormal(const glm::vec3& dir) const
+{
+	return normalMat * dir;
 }
 
 glm::vec3 Transform::ToObjectSpace(const glm::vec3& vec) const

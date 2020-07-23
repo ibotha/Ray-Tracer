@@ -5,17 +5,20 @@ Scene::Scene()
 {
 }
 
-Intersection Scene::Intersect(const Ray& ray)
+Intersection Scene::Intersect(const Ray& ray, float min, float max)
 {
 	Intersection i;
 	i.dist = INFINITY;
 
 	for (auto o : objects)
 	{
-		Intersection n = o->Intersect(ray);
+		Intersection n = o->Intersect(ray, min, max);
 		n.object = o;
-		if (n.hit && n.dist < i.dist && n.dist > 0.0001f)
+		if (n.hit)
+		{
+			max = n.dist;
 			i = n;
+		}
 	}
 	return i;
 }

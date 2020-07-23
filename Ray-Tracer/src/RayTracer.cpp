@@ -46,11 +46,11 @@ void RayTracer::render()
 // Sends a ray out into the scene and returns the color after all lighting and other calculations
 glm::vec3 RayTracer::Trace(const Ray& ray, int depth)
 {
-	Intersection i = m_Scene.Intersect(ray);
+	Intersection i = m_Scene.Intersect(ray, 0.001f, INFINITY);
 
 	if (i.hit)
 	{
-		//TODO: Get from material
+		//return (i.normal + glm::vec3(1)) * 0.5f;
 		Ray n;
 		glm::vec3 attenuation;
 		if (depth > max_depth || !i.object->mat->scatter(ray, i, attenuation, n))

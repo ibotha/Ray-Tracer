@@ -17,9 +17,12 @@ public:
 	glm::vec3 ToObjectSpace(const glm::vec3& vec) const;
 	glm::vec3 ToWorldSpace(const glm::vec3& vec) const;
 
+	glm::vec3 ToWorldSpaceNormal(const glm::vec3& vec) const;
+
 private:
 	glm::mat4 otw;
 	glm::mat4 wto;
 	glm::mat3 otwDir;
 	glm::mat3 wtoDir;
+	glm::mat3 normalMat;
 };
