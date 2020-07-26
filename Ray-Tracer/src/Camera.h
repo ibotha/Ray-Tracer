@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <stdio.h>
 #include "Transform.h"
 
 struct Camera

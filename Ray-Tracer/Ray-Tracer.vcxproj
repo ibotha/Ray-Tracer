@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\Intersection.h" />
     <ClInclude Include="src\Material.h" />
@@ -147,6 +148,7 @@
     <ClCompile Include="src\Intersection.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Object.cpp" />
+    <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\RayTracer.cpp" />
     <ClCompile Include="src\Scene.cpp" />
