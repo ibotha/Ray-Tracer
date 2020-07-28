@@ -1,6 +1,6 @@
 #include "RayTracer.h"
 #include "Sphere.h"
-#include "Plane.h"
+#include "Disk.h"
 
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
@@ -18,7 +18,7 @@ public:
     bool OnUserCreate() override {
         std::cout << "Creating RayTracer\n";
         //populate scene here
-        int samplesPerPixel = 1;
+        int samplesPerPixel = 64;
         int maxDepth = 10;
         tracer = new RayTracer(ScreenWidth(), ScreenHeight(), maxDepth, samplesPerPixel);
         Scene& scene = tracer->GetScene();
@@ -26,6 +26,7 @@ public:
         CreateCamera(scene);
         PopulateSceneObjects(scene);
         
+        //tracer->render();
         tracer->render_parallel();
         DrawSprite({ 0, 0 }, &tracer->GetRender());
         return true;
@@ -39,12 +40,12 @@ public:
 
     void PopulateSceneObjects(Scene& scene) {
         scene.objects.push_back(std::make_shared<Sphere>(glm::vec3(0, 0, 0), 1));
-        scene.objects.back()->mat = std::make_shared<Metal>(glm::vec3(0.9f, 0.9f, 0.9f), 0.0f);
+        //scene.objects.back()->mat = std::make_shared<Metal>(glm::vec3(0.9f, 0.9f, 0.9f), 0.0f);
 
         //scene.objects.push_back(std::make_shared<Sphere>(glm::vec3(2, -0.5, 0), 0.5));
         //scene.objects.back()->mat = std::make_shared<Dielectric>(glm::vec3(1.0f, 1.0f, 1.0f), 0.2f, 1.5f);
 
-        scene.objects.push_back(std::make_shared<Plane>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1)));
+        scene.objects.push_back(std::make_shared<Disk>(glm::vec3(0, 0, -0.5), glm::vec3(0.5, 0.5, 0.5), 2.0f));
 
         // Large base sphere.
         //scene.objects.push_back(std::make_shared<Sphere>(glm::vec3(0, -1001, 0), 1000));
@@ -79,6 +80,7 @@ public:
             tracer->GetScene().camera = Camera(pos, rot);
             // If we have a scene file we can re-read it and re-render here
             tracer->render_parallel();
+            //tracer->render();
             DrawSprite({ 0, 0 }, &tracer->GetRender());
         }
         if (GetKey(olc::ESCAPE).bPressed)
@@ -90,6 +92,6 @@ public:
 
 int main() {
     App app;
-    if (app.Construct(800, 600, 1, 1))
+    if (app.Construct(1024, 768, 1, 1))
         app.Start();
 }

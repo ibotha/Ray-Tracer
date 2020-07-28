@@ -27,7 +27,7 @@ void RayTracer::render_parallel() {
     const float ARangle = angle * (1 / AR);
 
     std::atomic<int> widthSum = 0;
-    const int widthSegment = width / 10;
+    const int widthSegment = width / 5;
 
     parallel_for(size_t(0), width, [&](size_t x) {
 

@@ -2,10 +2,10 @@
 
 #include "Object.h"
 
-class Plane : public Object {
+class Disk : public Object {
 public:
-	Plane(const glm::vec3& normal, const glm::vec3& pos);
-	virtual ~Plane() {}
+	Disk(const glm::vec3& normal, const glm::vec3& pos, const float diameter);
+	virtual ~Disk() {}
 
 	virtual Intersection Intersect(const Ray& ray, float min, float max) override;
 
@@ -16,4 +16,6 @@ protected:
 	glm::vec3 point;
 	// The plane normal.
 	glm::vec3 normal;
+	
+	float radius;
 };
