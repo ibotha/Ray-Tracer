@@ -30,13 +30,12 @@ Intersection Plane::Intersect(const Ray& ray, float min, float max) {
 		return i;
 	}
 
-	auto numer = -1 * (coefs[0] * rP[0] + coefs[1] * rP[1] + coefs[2] * rP[2]);
-	auto denom = (coefs[0] * rD[0] + coefs[1] * rD[1] + coefs[2] * rD[2]);
+	float numer = -1 * (coefs[0] * rP[0] + coefs[1] * rP[1] + coefs[2] * rP[2]);
 
 	// dist is the multiple of the ray unit vector to hit the plane.
-	auto dist = numer / denom; // this shouldn't be zero since a parallel ray possibility has been eliminated.
+	float dist = numer / overlap; // this shouldn't be zero since a parallel ray possibility has been eliminated.
 	// if dist is in range we have a hit, otherwise the hit is behind the ray cast.
-	if (dist > min && dist < max) {
+	if (dist < min || dist > max) {
 		i.hit = false;
 		return i;
 	}
