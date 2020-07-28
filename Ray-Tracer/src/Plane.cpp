@@ -1,7 +1,7 @@
 #include "Plane.h"
 #include <iostream>
 
-Plane::Plane(const glm::vec3& _normal, const glm::vec3& _point)
+Plane::Plane(const glm::vec3& _point, const glm::vec3& _normal)
 	:Object(
 		Transform(_point, glm::vec3(0), glm::vec3(0))
 	){

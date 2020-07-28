@@ -1,5 +1,6 @@
 #include "RayTracer.h"
 #include "Sphere.h"
+#include "Plane.h"
 
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
@@ -25,7 +26,7 @@ public:
         CreateCamera(scene);
         PopulateSceneObjects(scene);
         
-        tracer->render();
+        tracer->render_parallel();
         DrawSprite({ 0, 0 }, &tracer->GetRender());
         return true;
     }
@@ -43,8 +44,10 @@ public:
         //scene.objects.push_back(std::make_shared<Sphere>(glm::vec3(2, -0.5, 0), 0.5));
         //scene.objects.back()->mat = std::make_shared<Dielectric>(glm::vec3(1.0f, 1.0f, 1.0f), 0.2f, 1.5f);
 
+        scene.objects.push_back(std::make_shared<Plane>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1)));
+
         // Large base sphere.
-        scene.objects.push_back(std::make_shared<Sphere>(glm::vec3(0, -1001, 0), 1000));
+        //scene.objects.push_back(std::make_shared<Sphere>(glm::vec3(0, -1001, 0), 1000));
 
         //tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 0, 2), glm::vec3(0, 0, 0), glm::vec3(1, 1, 2))));
         //tracer->GetScene().objects.push_back(std::make_shared<Sphere>(Transform(glm::vec3(0, 2, 0), glm::vec3(0, 0, 0), glm::vec3(1, 2, 1))));
@@ -75,7 +78,7 @@ public:
                 rot.x -= 1;
             tracer->GetScene().camera = Camera(pos, rot);
             // If we have a scene file we can re-read it and re-render here
-            tracer->render();
+            tracer->render_parallel();
             DrawSprite({ 0, 0 }, &tracer->GetRender());
         }
         if (GetKey(olc::ESCAPE).bPressed)
@@ -87,6 +90,6 @@ public:
 
 int main() {
     App app;
-    if (app.Construct(320, 240, 1, 1))
+    if (app.Construct(800, 600, 1, 1))
         app.Start();
 }
