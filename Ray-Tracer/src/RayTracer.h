@@ -10,6 +10,8 @@ class RayTracer
 public:
 	RayTracer(int32_t w, int32_t h, int max_depth = 3, int samplesPerPixel = 16);
 
+	void render_parallel();
+
 	void render();
 
 	inline olc::Sprite& GetRender() { return m_Render; }
