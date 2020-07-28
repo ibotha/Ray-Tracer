@@ -16,7 +16,7 @@ RayTracer::RayTracer(int32_t w, int32_t h, int _max_depth, int _samplesPerPixel)
 // Computes the product of two square matrices in parallel.
 void RayTracer::render_parallel() {
 
-    std::cout << "Starting Render.\n";
+    std::cout << "Starting Render in Parallel.\n";
 
     float FOV = m_Scene.camera.FOV;
     const float AR = m_Render.height / static_cast<float>(m_Render.width);
@@ -26,13 +26,19 @@ void RayTracer::render_parallel() {
     const size_t width = static_cast<size_t>(m_Render.width);
     const float ARangle = angle * (1 / AR);
 
+    std::atomic<int> widthSum = 0;
+    const int widthSegment = width / 10;
+
     parallel_for(size_t(0), width, [&](size_t x) {
-        if (x % 25 == 0)
-            std::cout << ((float)x / m_Render.width) * 100 << "%\n";
+
+        auto count = widthSum++;
+        if (count % widthSegment == 0) {
+            std::cout << (float)(((float) count / (float) width) * 100) << "%\n";
+        }
 
         float xSalt = 0, ySalt = 0;
 
-        for (size_t y = 0; y < m_Render.height; y++) {
+        for (int y = 0; y < m_Render.height; y++) {
 
             glm::vec3 colour = { 0, 0, 0 };
             for (int i = 0; i < samplesPerPixel; i++) {
@@ -42,8 +48,8 @@ void RayTracer::render_parallel() {
                     ySalt = 0;
                 }
                 else {
-                    xSalt = random_double();
-                    ySalt = random_double();
+                    xSalt = random_float();
+                    ySalt = random_float();
                 }
 
                 Ray ray({ 0, 0, 0 }, {
@@ -56,9 +62,9 @@ void RayTracer::render_parallel() {
                 colour += Trace(ray);
             }
             float scale = 1.0f / samplesPerPixel;
-            colour.r = glm::sqrt(colour.r * scale);
-            colour.g = glm::sqrt(colour.g * scale);
-            colour.b = glm::sqrt(colour.b * scale);
+            //colour = glm::sqrt(colour * scale);
+            auto scaled_colour = colour * scale;
+            colour = glm::log2(scaled_colour + 1.0f);
             m_Render.SetPixel(x, y, olc::Pixel(colour.r * 255, colour.g * 255, colour.b * 255));
         }
     });
@@ -106,9 +112,8 @@ void RayTracer::render() {
                 colour += Trace(ray);
             }
             float scale = 1.0f / samplesPerPixel;
-            colour.r = glm::sqrt(colour.r * scale);
-            colour.g = glm::sqrt(colour.g * scale);
-            colour.b = glm::sqrt(colour.b * scale);
+            auto scaled_colour = colour * scale;
+            colour = glm::sqrt(scaled_colour);
             m_Render.SetPixel(x, y, olc::Pixel(colour.r * 255, colour.g * 255, colour.b * 255));
         }
     }
