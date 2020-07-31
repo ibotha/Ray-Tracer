@@ -1,6 +1,8 @@
 #include "RayTracer.h"
 #include "Sphere.h"
 #include "Disk.h"
+#include "Triangle.h"
+#include "TriangleGlm.h"
 
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
@@ -18,7 +20,7 @@ public:
     bool OnUserCreate() override {
         std::cout << "Creating RayTracer\n";
         //populate scene here
-        int samplesPerPixel = 64;
+        int samplesPerPixel = 4;
         int maxDepth = 10;
         tracer = new RayTracer(ScreenWidth(), ScreenHeight(), maxDepth, samplesPerPixel);
         Scene& scene = tracer->GetScene();
@@ -39,13 +41,16 @@ public:
     }
 
     void PopulateSceneObjects(Scene& scene) {
-        scene.objects.push_back(std::make_shared<Sphere>(glm::vec3(0, 0, 0), 1));
+        //scene.objects.push_back(std::make_shared<Sphere>(glm::vec3(0, 0, 0), 1));
         //scene.objects.back()->mat = std::make_shared<Metal>(glm::vec3(0.9f, 0.9f, 0.9f), 0.0f);
 
         //scene.objects.push_back(std::make_shared<Sphere>(glm::vec3(2, -0.5, 0), 0.5));
         //scene.objects.back()->mat = std::make_shared<Dielectric>(glm::vec3(1.0f, 1.0f, 1.0f), 0.2f, 1.5f);
 
-        scene.objects.push_back(std::make_shared<Disk>(glm::vec3(0, 0, -0.5), glm::vec3(0.5, 0.5, 0.5), 2.0f));
+        //scene.objects.push_back(std::make_shared<Disk>(glm::vec3(0, 0, -0.5), glm::vec3(-0.5, 0.5, 0.5), 2.0f));
+
+        //scene.objects.push_back(std::make_shared<Plane>(glm::vec3(0, 0, -0.5), glm::vec3(0.5, 0.5, 0.5)));
+        scene.objects.push_back(std::make_shared<TriangleGlm>(glm::vec3(0, 0, -100), glm::vec3(0, 3, -0.1), glm::vec3(3, 0, -0.1)));
 
         // Large base sphere.
         //scene.objects.push_back(std::make_shared<Sphere>(glm::vec3(0, -1001, 0), 1000));
@@ -57,26 +62,31 @@ public:
 
 
     bool OnUserUpdate(float fElapsedTime) override {
+        static int inc = 1;
         // called once per frame
         if (GetKey(olc::SPACE).bPressed) {
             static glm::vec3 pos = { 0, 0, 5 };
             static glm::vec3 rot = { 0, 0, 0 };
+            if (GetKey(olc::I).bHeld)
+                inc++;
+            if (GetKey(olc::O).bHeld && inc > 1)
+                inc--;
             if (GetKey(olc::W).bHeld)
-                pos.z -= 1;
+                pos.z -= inc;
             if (GetKey(olc::S).bHeld)
-                pos.z += 1;
+                pos.z += inc;
             if (GetKey(olc::A).bHeld)
-                pos.x -= 1;
+                pos.x -= inc;
             if (GetKey(olc::D).bHeld)
-                pos.x += 1;
+                pos.x += inc;
             if (GetKey(olc::LEFT).bHeld)
-                rot.y += 1;
+                rot.y += inc;
             if (GetKey(olc::RIGHT).bHeld)
-                rot.y -= 1;
+                rot.y -= inc;
             if (GetKey(olc::UP).bHeld)
-                rot.x += 1;
+                rot.x += inc;
             if (GetKey(olc::DOWN).bHeld)
-                rot.x -= 1;
+                rot.x -= inc;
             tracer->GetScene().camera = Camera(pos, rot);
             // If we have a scene file we can re-read it and re-render here
             tracer->render_parallel();
@@ -92,6 +102,6 @@ public:
 
 int main() {
     App app;
-    if (app.Construct(1024, 768, 1, 1))
+    if (app.Construct(600, 400, 1, 1))
         app.Start();
 }
