@@ -142,6 +142,7 @@
     <ClInclude Include="src\RayTracer.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Sphere.h" />
+    <ClInclude Include="src\SphereGlm.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\Triangle.h" />
     <ClInclude Include="src\TriangleGlm.h" />
@@ -158,6 +159,7 @@
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Sphere.cpp" />
+    <ClCompile Include="src\SphereGlm.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Triangle.cpp" />
     <ClCompile Include="src\TriangleGlm.cpp" />
