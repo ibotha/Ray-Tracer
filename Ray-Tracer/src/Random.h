@@ -9,6 +9,12 @@ inline double random_double() {
 	return distribution(generator);
 }
 
+inline float random_float() {
+	static std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
+	static std::mt19937 generator;
+	return distribution(generator);
+}
+
 inline double random_double_range(double min, double max) {
 	return random_double()* (max - min) + min;
 }

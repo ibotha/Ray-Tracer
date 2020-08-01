@@ -2,11 +2,11 @@
 
 #include "Object.h"
 
-class Sphere : public Object {
+class SphereGlm : public Object {
 public:
-	Sphere(const glm::vec3 &pos, float size);
-	Sphere(const Transform& _transform);
-	virtual ~Sphere() {}
+	SphereGlm(const glm::vec3& pos, float size);
+	SphereGlm(const Transform& _transform);
+	virtual ~SphereGlm() {}
 
 	glm::vec3 pos;
 	float radius;
