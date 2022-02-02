@@ -1,0 +1,3 @@
+﻿  Ray-Tracer.cpp
+C:\Programming\Ray-Tracer\Ray-Tracer\src\Ray-Tracer.cpp(21,20): warning C4018: '<': signed/unsigned mismatch
+  Ray-Tracer.vcxproj -> C:\Programming\Ray-Tracer\Debug\Ray-Tracer.exe

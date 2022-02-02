@@ -1,0 +1,1 @@
+C:\Programming\Ray-Tracer\Ray-Tracer\Debug\Ray-Tracer.vcxproj.CopyComplete
