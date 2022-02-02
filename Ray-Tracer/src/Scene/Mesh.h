@@ -3,11 +3,14 @@
 #include <assimp/scene.h>
 #include <vector>
 #include <glm/glm.hpp>
+#include <Ray.h>
+#include "HitRecord.h"
 
 class Mesh
 {
 public:
 	Mesh(aiMesh* mesh, aiNode* node);
+	bool Intersect(const Ray& r, HitRecord& rec) const;
 
 private:
 	glm::vec3 m_Position;

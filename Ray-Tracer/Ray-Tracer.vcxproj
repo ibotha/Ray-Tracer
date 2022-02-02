@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\HitRecord.cpp" />
     <ClCompile Include="src\conversion.cpp" />
     <ClCompile Include="src\print_helpers.cpp" />
     <ClCompile Include="src\Ray.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="src\Ray-Tracer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\HitRecord.h" />
     <ClInclude Include="src\print_helpers.h" />
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\conversion.h" />

@@ -12,7 +12,7 @@ public:
 	float m_AR;
 	glm::mat4 m_View;
 	glm::vec3 m_Position;
-	glm::vec3 lower_left_cornder;
+	glm::vec3 lower_left_corner;
 	glm::vec3 horizontal;
 	glm::vec3 vertical;
 };
