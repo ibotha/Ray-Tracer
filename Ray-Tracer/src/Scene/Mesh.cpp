@@ -2,8 +2,9 @@
 #include <conversion.h>
 #include <glm/gtx/transform.hpp>
 
-Mesh::Mesh(aiMesh* mesh)
+Mesh::Mesh(aiMesh* mesh, aiNode * node)
 {
+    m_Model = aiGetNodeWorldMatrix(node);
 	m_Vertices.reserve(mesh->mNumVertices);
 	for (int i = 0; i < mesh->mNumVertices; i++) {
 		m_Vertices.push_back(aiVec3DToGLMVec3(mesh->mVertices[i]));

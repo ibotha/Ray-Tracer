@@ -16,7 +16,7 @@ public:
 	/*Generates a ray in world space using the scenes camera.
 	the x and y are between -1 and 1 where -1 is left and bottom*/
 	Ray GenerateRay(float x, float y);
-
+	const Camera& GetCamera()const;
 private:
 	Camera* m_Camera = nullptr;
 	std::vector<std::unique_ptr<Light>> m_Lights;

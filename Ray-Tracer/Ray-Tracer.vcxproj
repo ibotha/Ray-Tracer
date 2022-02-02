@@ -28,6 +28,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\conversion.cpp" />
+    <ClCompile Include="src\print_helpers.cpp" />
+    <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\Scene\Camera.cpp" />
     <ClCompile Include="src\Scene\Light.cpp" />
     <ClCompile Include="src\Scene\Mesh.cpp" />
@@ -36,6 +38,7 @@
     <ClCompile Include="src\Ray-Tracer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\print_helpers.h" />
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\conversion.h" />
     <ClInclude Include="src\Scene\Camera.h" />

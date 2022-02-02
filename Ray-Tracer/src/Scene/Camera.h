@@ -1,15 +1,19 @@
 #pragma once
 #include <assimp/camera.h>
+#include <assimp/scene.h>
 #include <glm/glm.hpp>
 
 class Camera
 {
 public:
-	Camera(const aiCamera* camera);
+	Camera(const aiCamera* camera, aiNode * node);
 
-	glm::mat4 m_Projection;
+	float m_FOV;
+	float m_AR;
 	glm::mat4 m_View;
-	glm::mat4 m_ViewProjection;
 	glm::vec3 m_Position;
+	glm::vec3 lower_left_cornder;
+	glm::vec3 horizontal;
+	glm::vec3 vertical;
 };
 

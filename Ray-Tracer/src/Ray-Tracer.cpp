@@ -1,21 +1,25 @@
 #include <iostream>
 #include "Image.hpp"
 #include <Scene/Scene.h>
+#include "print_helpers.h"
 
 int main(int argc, char* argv[]) {
 
 	try {
 		Scene scene("scenes/Basic.fbx");
 		// Image output
-		Image i(1080, 1080);
-		for (int x = 0; x < 1080; x++) {
-			for (int y = 0; y < 1080; y++) {
-				scene.
-				i.at(x, y) = colour{
-					static_cast<unsigned char>((x * 255) / 1080),
-					0,
-					static_cast<unsigned char>((y * 255) / 1080)
-				};
+
+		Ray r = scene.GenerateRay(0, 0);
+		unsigned int height = 1080, width = height * scene.GetCamera().m_AR;
+		Image i(width, height);
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				Ray r = scene.GenerateRay(
+					(x - width / 2.0f) / static_cast<float>(width - 1),
+					(y - height / 2.0f) / static_cast<float>(height - 1));
+				i.at(x, y) = colour(
+					r.direction * 127.5f + 127.4f
+				);
 			}
 		}
 		i.Save("output/out.png");

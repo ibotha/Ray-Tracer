@@ -20,13 +20,13 @@ Scene::Scene(const char* path)
 		throw std::runtime_error("Scene has no cameras!");
 	}
 
-	m_Camera = new Camera(scene->mCameras[0]);
+	m_Camera = new Camera(scene->mCameras[0], scene->mRootNode->FindNode(scene->mCameras[0]->mName));
 
-	if (scene->HasLights()) {
+	/*if (scene->HasLights()) {
 		m_Lights.reserve(scene->mNumLights);
 		for (int i = 0; i < scene->mNumLights; i++)
 		{
-			m_Lights.push_back(Light::CreateLight(scene->mLights[i]));
+			m_Lights.push_back(Light::CreateLight(scene->mLights[i], scene->mRootNode->FindNode(scene->mLights[i]->mName)));
 		}
 	}
 
@@ -34,9 +34,9 @@ Scene::Scene(const char* path)
 		m_Meshes.reserve(scene->mNumMeshes);
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-			m_Meshes.emplace_back(scene->mMeshes[i]);
+			m_Meshes.emplace_back(scene->mMeshes[i], scene->mRootNode->FindNode(scene->mMeshes[i]->mName));
 		}
-	}
+	}*/
 }
 
 Scene::~Scene() {
@@ -45,14 +45,16 @@ Scene::~Scene() {
 
 Ray Scene::GenerateRay(float x, float y)
 {
-
+	x = x * 2;
+	y = y * 2;
 	Ray ray{
 		glm::vec3(0),
-		glm::normalize(glm::vec3(
-			x,
-			y,
-			-1
-		))
+		glm::normalize(m_Camera->lower_left_cornder + x* m_Camera->horizontal + y* m_Camera->vertical)
 	};
 	return ray.Transform(m_Camera->m_View);
+}
+
+const Camera& Scene::GetCamera() const
+{
+	return *m_Camera;
 }
