@@ -4,6 +4,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+#include <glm/gtc/random.hpp>
 
 Scene::Scene(const char* path)
 {
@@ -20,11 +21,14 @@ Scene::Scene(const char* path)
 		throw std::runtime_error("Scene has no cameras!");
 	}
 
-	m_Camera = new Camera(scene->mCameras[0], scene->mRootNode->FindNode(scene->mCameras[0]->mName));
+	for (unsigned int i = 0; i < scene->mNumCameras; i++)
+	{
+		m_Cameras.emplace_back(scene->mCameras[i], scene->mRootNode->FindNode(scene->mCameras[i]->mName));
+	}
 
 	if (scene->HasLights()) {
 		m_Lights.reserve(scene->mNumLights);
-		for (int i = 0; i < scene->mNumLights; i++)
+		for (unsigned int i = 0; i < scene->mNumLights; i++)
 		{
 			m_Lights.push_back(Light::CreateLight(scene->mLights[i], scene->mRootNode->FindNode(scene->mLights[i]->mName)));
 		}
@@ -32,41 +36,38 @@ Scene::Scene(const char* path)
 
 	if (scene->HasMeshes()) {
 		m_Meshes.reserve(scene->mNumMeshes);
-		for (int i = 0; i < scene->mNumMeshes; i++)
+		for (unsigned int i = 0; i < scene->mNumMeshes; i++)
 		{
 			m_Meshes.emplace_back(scene->mMeshes[i], scene->mRootNode->FindNode(scene->mMeshes[i]->mName));
+		}
+	}
+
+	if (scene->HasMaterials()) {
+		m_Materials.reserve(scene->mNumMaterials);
+		for (unsigned int i = 0; i < scene->mNumMaterials; i++)
+		{
+			m_Materials.emplace_back(scene->mMaterials[i]);
 		}
 	}
 }
 
 Scene::~Scene() {
-	delete m_Camera;
 }
 
-Ray Scene::GenerateRay(float x, float y) const
+const std::vector<Camera>& Scene::GetCameras() const
 {
-	Ray ray{
-		glm::vec3(0),
-		glm::normalize(m_Camera->lower_left_corner + x* m_Camera->horizontal + y* m_Camera->vertical)
-	};
-	return ray.Transform(m_Camera->m_View);
+	return m_Cameras;
 }
 
-const Camera& Scene::GetCamera() const
+bool Scene::Intersect(const Ray& r, HitRecord& rec, float min, float max) const
 {
-	return *m_Camera;
-}
-
-bool Scene::Intersect(const Ray& r, HitRecord&rec) const
-{
-	float closest = INFINITY;
-	rec.t = INFINITY;
+	bool hit = false;
+	int i = 0;
 	for (const Mesh& mesh : m_Meshes) {
-		HitRecord ret_rec;
-		if (mesh.Intersect(r, ret_rec)) {
-			if (ret_rec.t < rec.t)
-				rec = ret_rec;
+		if (mesh.Intersect(r, rec, min, max) ) {
+			max = rec.t;
+			hit = true;
 		}
 	}
-	return rec.t != INFINITY;
+	return hit;
 }

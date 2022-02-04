@@ -1,12 +1,20 @@
 #include "Ray.h"
 #include "print_helpers.h"
 
+Ray::Ray(glm::vec3 _origin, glm::vec3 _direction)
+{
+	origin = _origin;
+	direction = _direction;
+}
+
 Ray Ray::Transform(const glm::mat4& mat) const
 {
-	return Ray{
-		glm::vec3(glm::vec4(origin, 1) * mat),
-		glm::normalize(direction * glm::mat3(mat)),
-	};
+	glm::vec3 new_origin = glm::vec3(glm::vec4(origin, 1) * mat);
+	glm::vec3 new_direction = direction * glm::mat3(mat);
+	return Ray(
+		new_origin,
+		new_direction
+	);
 
 }
 

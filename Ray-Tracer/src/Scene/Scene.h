@@ -2,6 +2,7 @@
 #include <Scene/Camera.h>
 #include <Scene/Light.h>
 #include <Scene/Mesh.h>
+#include <Scene/Material.h>
 #include <vector>
 #include <memory>
 #include <Ray.h>
@@ -14,15 +15,16 @@ public:
 	Scene(const char* path);
 	~Scene();
 
-	/*Generates a ray in world space using the scenes camera.
-	the x and y are between -1 and 1 where -1 is left and bottom*/
-	Ray GenerateRay(float x, float y) const;
-	const Camera& GetCamera()const;
-	bool Intersect(const Ray& r, HitRecord& rec) const;
+	const std::vector<Camera>& GetCameras() const;
+	inline const Material& GetMaterial(int i) const {
+		return m_Materials[i];
+	}
+	bool Intersect(const Ray& r, HitRecord& rec, float min, float max) const;
 
 private:
-	Camera* m_Camera = nullptr;
+	std::vector<Camera> m_Cameras;
 	std::vector<std::unique_ptr<Light>> m_Lights;
 	std::vector<Mesh> m_Meshes;
+	std::vector<Material> m_Materials;
 };
 

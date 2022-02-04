@@ -7,7 +7,9 @@
 Mesh::Mesh(aiMesh* mesh, aiNode * node)
 {
     m_Model = glm::inverse(aiGetNodeWorldMatrix(node));
+    std::cout << m_Model << std::endl;
 	m_Vertices.reserve(mesh->mNumVertices);
+    m_MaterialIndex = mesh->mMaterialIndex;
 	for (int i = 0; i < mesh->mNumVertices; i++) {
 		m_Vertices.push_back(aiVec3DToGLMVec3(mesh->mVertices[i]));
 	}
@@ -21,30 +23,32 @@ Mesh::Mesh(aiMesh* mesh, aiNode * node)
     }
 }
 
-bool Mesh::Intersect(const Ray& r, HitRecord& rec) const
+float length_squared(glm::vec3 vec) {
+    return glm::dot(vec, vec);
+}
+
+bool Mesh::Intersect(const Ray& r, HitRecord& rec, float min, float max) const
 {
     Ray local = r.Transform(m_Model);
-    float radius = 22;
-    float a = glm::dot(local.direction, local.direction);
-    float b = 2.0f * glm::dot(local.origin, local.direction);
-    float c = glm::dot(local.origin, local.origin) - radius*radius;
-    float discriminant = b*b - 4*a*c;
-    rec.colour = glm::vec3(1, 0.7, 0.5);
-    if (discriminant > 0) {
-        float dist = (-b - glm::sqrt(discriminant)) / (2.0f * a);
-        if (dist > 0) {
-            rec.t = dist;
-            rec.point = r.At(dist);
-            rec.normal = glm::normalize(glm::inverse(glm::mat3(m_Model)) * local.At(dist));
-            return true;
-        }
-        dist = (-b + glm::sqrt(discriminant)) / (2.0f * a);
-        if (dist > 0) {
-            rec.t = dist;
-            rec.point = r.At(dist);
-            rec.normal = glm::normalize(glm::inverse(glm::mat3(m_Model)) * local.At(dist));
-            return true;
+    float radius = 100;
+    float a = length_squared(local.direction);
+    float half_b = glm::dot(local.origin, local.direction);
+    float c = length_squared(local.origin) - radius*radius;
+    float discriminant = half_b*half_b - a*c;
+    if (discriminant < 0) return false;
+    
+    float sqrt_dis = glm::sqrt(discriminant);
+    float dist = (-half_b - sqrt_dis) / a;
+    if (dist < min || dist > max) {
+        dist = (-half_b + sqrt_dis) / a;
+        if (dist < min || dist > max) {
+            return false;
         }
     }
-    return false;
+
+    rec.t = dist;
+    rec.mIndex = m_MaterialIndex;
+    rec.SetNormal(r, glm::normalize(glm::inverse(glm::mat3(m_Model)) * local.At(dist)));
+    rec.point = r.At(dist);
+    return true;
 }
