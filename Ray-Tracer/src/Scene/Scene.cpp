@@ -61,13 +61,13 @@ const std::vector<Camera>& Scene::GetCameras() const
 
 bool Scene::Intersect(const Ray& r, HitRecord& rec, float min, float max) const
 {
-	bool hit = false;
-	int i = 0;
+	HitRecord local_rec;
+	rec.t = INFINITY;
 	for (const Mesh& mesh : m_Meshes) {
-		if (mesh.Intersect(r, rec, min, max) ) {
-			max = rec.t;
-			hit = true;
+		if (mesh.Intersect(r, local_rec, min, max) ) {
+			if (local_rec.t < rec.t)
+				rec = local_rec;
 		}
 	}
-	return hit;
+	return rec.t != INFINITY;
 }

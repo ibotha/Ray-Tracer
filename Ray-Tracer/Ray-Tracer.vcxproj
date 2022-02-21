@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\Scene\Material.cpp" />
     <ClCompile Include="src\HitRecord.cpp" />
     <ClCompile Include="src\conversion.cpp" />
@@ -40,6 +41,7 @@
     <ClCompile Include="src\Ray-Tracer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\Scene\Material.h" />
     <ClInclude Include="src\HitRecord.h" />
     <ClInclude Include="src\print_helpers.h" />
