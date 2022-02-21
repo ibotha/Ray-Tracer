@@ -5,41 +5,42 @@
 #include <future>
 #include "Random.h"
 
-const uint32_t MAX_DEPTH = 4;
+const uint32_t MAX_DEPTH = 8;
 const uint32_t SAMPLES_PER_PIXEL = 256;
 const uint32_t IMG_WIDTH = 1080;
 const float GAMMA = 2;
 
 glm::vec3 rayColour(Ray& r, Scene& scene, int depth = 0) {
-	glm::vec3 col(0);
 	HitRecord rec;
 	if (depth > MAX_DEPTH) {
 		return glm::vec3(0);
 	}
-	if (scene.Intersect(r, rec, 0.1f, INFINITY)) {
+	if (scene.Intersect(r, rec, 0.01f, INFINITY)) {
 		// Render normals
-		//col = rec.normal * 0.5f + 0.5f;
+		if (depth == MAX_DEPTH)
+			return rec.normal * 0.5f + 0.5f;
 
 		// Render Distance
 		float min = 1000, max = 1500;
 		//col = glm::vec3(1.0f - ((rec.t- min) / (max - min) ));
 
-		// Base Colour
-		//if (depth == MAX_DEPTH) {
-		//	col = scene.GetMaterial(rec.mIndex).GetColour();
-		//}
-		//else {
-			// Diffuse
-			Ray r(rec.point, glm::normalize(rec.normal + Random::RandomUnitVector()));
-			col = scene.GetMaterial(rec.mIndex).GetColour() * rayColour(r, scene, depth + 1);
-		//}
+		auto& mat = scene.GetMaterial(rec.mIndex);
+		if (mat.IsEmissive())
+			return mat.GetEmission();
+
+		Ray ray;
+		glm::vec3 attenuation;
+		if (mat.Scatter(r, rec, attenuation, ray))
+			return attenuation * rayColour(ray, scene, depth + 1);
+		return glm::vec3(0);
+
 
 	}
 	else {
 		float ratio = (-r.direction.y + 1.0f) / 2.0f;
-		col = glm::vec3(1.0f) * ratio + glm::vec3(0.5f, 0.7f, 1.0f) * (1.0f - ratio);
+		return glm::vec3(1.0f) * ratio + glm::vec3(0.5f, 0.7f, 1.0f) * (1.0f - ratio);
 	}
-	return col;
+	return glm::vec3(0);
 }
 
 glm::vec3 pixelColour(int x, int y, int width, int height, const Camera& camera, Scene& scene) {

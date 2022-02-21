@@ -49,6 +49,6 @@ bool Mesh::Intersect(const Ray& r, HitRecord& rec, float min, float max) const
     rec.t = dist;
     rec.mIndex = m_MaterialIndex;
     rec.SetNormal(r, glm::normalize(glm::inverse(glm::mat3(m_Model)) * local.At(dist)));
-    rec.point = r.At(dist);
+    rec.point = r.At(dist) + (rec.inside ? -rec.normal : rec.normal) * 0.001f;
     return true;
 }

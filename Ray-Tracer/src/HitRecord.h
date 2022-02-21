@@ -11,7 +11,7 @@ struct HitRecord
 	bool inside;
 
 	inline void SetNormal(const Ray& r, glm::vec3 outside_normal) {
-		if (glm::dot(r.direction, normal) > 0) {
+		if (glm::dot(r.direction, outside_normal) < 0) {
 			normal = outside_normal;
 			inside = false;
 		}

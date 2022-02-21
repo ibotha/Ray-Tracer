@@ -65,8 +65,9 @@ bool Scene::Intersect(const Ray& r, HitRecord& rec, float min, float max) const
 	rec.t = INFINITY;
 	for (const Mesh& mesh : m_Meshes) {
 		if (mesh.Intersect(r, local_rec, min, max) ) {
-			if (local_rec.t < rec.t)
+			if (local_rec.t < rec.t) {
 				rec = local_rec;
+			}
 		}
 	}
 	return rec.t != INFINITY;
