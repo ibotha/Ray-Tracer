@@ -7,10 +7,10 @@
 glm::vec3 rayColour(Ray& r, Scene& scene, int depth = 0) {
 	glm::vec3 col(0);
 	HitRecord rec;
-	if (depth == 25) {
+	if (depth == 10) {
 		return glm::vec3(0);
 	}
-	if (scene.Intersect(r, rec, 2.f, INFINITY)) {
+	if (scene.Intersect(r, rec, 0.001f, INFINITY)) {
 		// Render normals
 		//col = rec.normal * 0.5f + 0.5f;
 
@@ -30,7 +30,7 @@ glm::vec3 rayColour(Ray& r, Scene& scene, int depth = 0) {
 }
 
 glm::vec3 pixelColour(int x, int y, int width, int height, const Camera& camera, Scene& scene) {
-	int samples_per_pixel = 100;
+	int samples_per_pixel = 500;
 	glm::vec3 col(0.0f);
 
 	for (int s = 0; s < samples_per_pixel; s++) {
@@ -53,10 +53,10 @@ void renderScene(const char* sceneName, const char* outName) {
 	Scene scene(sceneName);
 	// Image output
 	for (const Camera& camera : scene.GetCameras()) {
-		unsigned int height = 256, width = static_cast<unsigned int>(height * camera.AR);
+		unsigned int height = 128, width = static_cast<unsigned int>(height * camera.AR);
 		Image i(width, height);
 		for (unsigned int x = 0; x < width; x++) {
-			//std::cout << (x * 100) / static_cast<float>(width) << "%" << std::endl;
+			std::cout << (x * 100) / static_cast<float>(width) << "%" << std::endl;
 			for (unsigned int y = 0; y < height; y++) {
 				glm::vec3 col = pixelColour(x, y, width, height, camera, scene);
 
