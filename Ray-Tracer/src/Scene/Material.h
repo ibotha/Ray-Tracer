@@ -28,6 +28,8 @@ private:
 	float m_Shininess{ 0 };
 	float m_ShininessStrength{ 0 };
 	float m_Reflectivity{ 0 };
+	float m_Roughness{ 0 };
+	float m_SpecularTint{ 0 };
 	float m_RefractionIndex{ 0 };
 	float m_Transmission{ 0 };
 	bool m_Emissive = false;

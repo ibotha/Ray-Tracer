@@ -5,9 +5,10 @@
 #include <future>
 #include "Random.h"
 
-const uint32_t MAX_DEPTH = 8;
+const uint32_t MAX_DEPTH = 12;
+const uint32_t THREADS = 8;
 const uint32_t SAMPLES_PER_PIXEL = 256;
-const uint32_t IMG_WIDTH = 1080;
+const uint32_t IMG_WIDTH = 256;
 const float GAMMA = 2;
 
 glm::vec3 rayColour(Ray& r, Scene& scene, int depth = 0) {
@@ -73,7 +74,7 @@ void renderScene(const char* sceneName, const char* outName) {
 	for (const Camera& camera : scene.GetCameras()) {
 		unsigned int height = IMG_WIDTH, width = static_cast<unsigned int>(height * camera.AR);
 		Image i(width, height);
-		unsigned int thread_count = 4;
+		unsigned int thread_count = THREADS;
 		std::vector<std::future<bool>> threads;
 		std::atomic<unsigned int> index;
 		auto executor = [&]() -> bool {
@@ -104,12 +105,16 @@ void renderScene(const char* sceneName, const char* outName) {
 
 int main(int argc, char* argv[]) {
 	Random::Init();
+	auto start = std::chrono::high_resolution_clock::now();
+
 	try {
 		renderScene("scenes/Basic.fbx", "output/out");
+		auto end = std::chrono::high_resolution_clock::now();
+		auto difference = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+		std::cout << "Seconds since start: " << difference;
 	}
 	catch (const std::runtime_error & e){
 		std::cerr << e.what() << std::endl;
 		return 1;
 	}
-
 }

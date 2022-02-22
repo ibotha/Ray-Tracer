@@ -4,14 +4,14 @@
 #include <conversion.h>
 #include <Random.h>
 bool almost_zero(const glm::vec3& v) {
-	float eps = 1e-5;
+	float eps = 1e-5f;
 	return (v.x < eps&& v.y < eps&& v.z < eps);
 }
 
 Material::Material(aiMaterial* mat) {
 	std::cout << mat->GetName().C_Str() << std::endl;
 
-	for (int i = 0; i < mat->mNumProperties; i++)
+	for (unsigned int i = 0; i < mat->mNumProperties; i++)
 	{
 		std::cout << mat->mProperties[i]->mKey.C_Str() << ", ";
 		switch (mat->mProperties[i]->mType)
@@ -35,6 +35,7 @@ Material::Material(aiMaterial* mat) {
 	aiColor3D transparent(0);
 	float shininess{0};
 	float shininess_strength{ 0 };
+	float shininess_tint{ 0 };
 	float reflectivity{ 0 };
 	float refraction_index{ 0 };
 	float transmission{ 0 };
@@ -79,6 +80,10 @@ Material::Material(aiMaterial* mat) {
 		std::cerr << "transmission could not be read!" << std::endl;
 	}
 
+	if (mat->Get("$raw.specular_tint", 0, 0, shininess_tint) != aiReturn_SUCCESS) {
+		std::cerr << "specular_tint could not be read!" << std::endl;
+	}
+
 	if (mat->Get(AI_MATKEY_COLOR_TRANSPARENT, transparent) != aiReturn_SUCCESS) {
 		std::cerr << "transparent could not be read!" << std::endl;
 	}
@@ -89,8 +94,11 @@ Material::Material(aiMaterial* mat) {
 	m_Reflective = aiCol3ToGLMVec3(reflective);
 	m_Ambient = aiCol3ToGLMVec3(ambient);
 	m_Transparent = aiCol3ToGLMVec3(transparent);
-	m_Shininess = shininess;
+	m_Shininess = shininess / 100.0f;
 	m_ShininessStrength = shininess_strength;
+	m_Roughness = 1 - m_Shininess;
+	m_ShininessStrength = shininess_strength;
+	m_SpecularTint = shininess_tint;
 	m_Reflectivity = reflectivity;
 	m_RefractionIndex = refraction_index;
 	m_Transmission = transmission;
@@ -105,7 +113,9 @@ Material::Material(aiMaterial* mat) {
 		"m_Transparent: " << m_Transparent << std::endl <<
 		"m_Shininess: " << m_Shininess << std::endl <<
 		"m_ShininessStrength: " << m_ShininessStrength << std::endl <<
+		"m_SpecularTint: " << m_SpecularTint << std::endl <<
 		"m_Reflectivity: " << m_Reflectivity << std::endl <<
+		"m_Roughness: " << m_Roughness << std::endl <<
 		"m_RefractionIndex: " << m_RefractionIndex << std::endl <<
 		"m_Transmission: " << m_Transmission << std::endl <<
 		"m_Emissive: " << m_Emissive << std::endl <<
@@ -129,26 +139,27 @@ float Reflectance(float cosine, float ref_idx) {
 
 bool Material::Scatter(const Ray& in, const HitRecord& rec, glm::vec3& attenuation, Ray& scattered) const
 {
-	float fuzz = 1 - (m_Shininess / 100.0f);
 	scattered.origin = rec.point;
+
 	// Reflect | Metalic
 	if (Random::RandomFloat() < m_Reflectivity) {
-		scattered.direction = glm::reflect(glm::normalize(in.direction), rec.normal) + (Random::RandomInUnitSphere() * fuzz);
-		if (glm::dot(scattered.direction, rec.normal) < 0)
+		glm::vec3 reflected = glm::reflect(glm::normalize(in.direction), rec.normal) + (Random::RandomInUnitSphere() * m_Roughness);
+		if (glm::dot(reflected, rec.normal) < 0)
 			return false;
+		scattered.direction = reflected;
 		attenuation = m_Reflective;
 		return true;
 	}
 
 	// Dielectric
 	if (Random::RandomFloat() < m_Transmission) {
-		float refraction_ratio = rec.inside ? m_RefractionIndex : (1.0f / m_RefractionIndex);
+		float refraction_ratio = rec.inside ? m_RefractionIndex : (1 / m_RefractionIndex);
 
 		glm::vec3 unit_direction = glm::normalize(in.direction);
-		double cos_theta = fmin(dot(-unit_direction, rec.normal), 1.0);
-		double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+		float cos_theta = fmin(dot(-unit_direction, rec.normal), 1.0f);
+		float sin_theta = sqrt(1.0f - cos_theta * cos_theta);
 		bool refract = true;
-		if (refraction_ratio * sin_theta > 1.0) {
+		if ((refraction_ratio * sin_theta) > 1.0f) {
 			refract = false;
 		}
 		else {
@@ -156,24 +167,45 @@ bool Material::Scatter(const Ray& in, const HitRecord& rec, glm::vec3& attenuati
 		}
 
 		if (refract) {
-			scattered.direction = glm::normalize(Refract(unit_direction, rec.normal, refraction_ratio) + (Random::RandomInUnitSphere() * fuzz));
+			scattered.direction = glm::normalize(glm::refract(unit_direction, rec.normal, refraction_ratio) + (Random::RandomInUnitSphere() * m_Roughness));
 			attenuation = m_Diffuse;
 			return true;
 		}
-		scattered.direction = glm::normalize(glm::reflect(glm::normalize(in.direction), rec.normal) + (Random::RandomInUnitSphere() * fuzz));
-		if (glm::dot(scattered.direction, rec.normal) < 0)
+		glm::vec3 reflected = glm::normalize(glm::reflect(glm::normalize(in.direction), rec.normal) + (Random::RandomInUnitSphere() * m_Roughness));
+		if (glm::dot(reflected, rec.normal) < 0)
 			return false;
+		scattered.direction = reflected;
 		attenuation = m_Specular;
 		return true;
 
 	}
 
+
 	// Reflect | Gloss
 	if (Random::RandomFloat() < m_ShininessStrength) {
-		scattered.direction = glm::normalize(glm::reflect(glm::normalize(in.direction), rec.normal) + (Random::RandomInUnitSphere() * fuzz));
-		if (glm::dot(scattered.direction, rec.normal) < 0)
+
+		glm::vec3 reflected = glm::reflect(glm::normalize(in.direction), rec.normal) + (Random::RandomInUnitSphere() * m_Roughness);
+
+		if (glm::dot(reflected, rec.normal) < 0)
 			return false;
-		attenuation = m_Specular / (m_ShininessStrength);
+
+		float fresnel = (glm::dot(in.direction, reflected) + 1) / 2.0f;
+		fresnel = glm::pow(fresnel, 6.0f);
+
+		scattered.direction = reflected;
+
+		float ratio = m_Shininess;
+		glm::vec3 mid = 
+			(m_Specular * m_SpecularTint) +
+			(glm::vec3(m_ShininessStrength *0.15f) * (1.f-m_SpecularTint));
+		glm::vec3 outer = glm::vec3(m_ShininessStrength);
+		glm::vec3 clearcoat = 
+			(mid * (1 - fresnel)) +
+			(outer * (fresnel));
+		attenuation = (
+			(m_Specular * (1-ratio)) +
+			(clearcoat * (ratio))
+		) / m_ShininessStrength;
 		return true;
 	}
 
