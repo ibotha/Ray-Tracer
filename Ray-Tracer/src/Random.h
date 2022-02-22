@@ -22,6 +22,11 @@ public:
 		return min + (max - min) * Float();
 	}
 
+	inline static int Int(int min, int max) {
+		// Returns a random integer in [min,max).
+		return min + (max - min) * Float();
+	}
+
 	inline static glm::vec3 Vec3() {
 		return glm::vec3(Float(), Float(), Float());
 	}

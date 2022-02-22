@@ -55,12 +55,21 @@ Scene::Scene(const char* path)
 		}
 	}
 
+	std::sort(m_Meshes.begin(), m_Meshes.end(), [](auto& a, auto& b)-> int {
+		AABB a_bound, b_bound;
+		a->GetBounds(a_bound);
+		b->GetBounds(b_bound);
+		return glm::distance(a_bound.min, glm::vec3(0.0f)) - glm::distance(b_bound.min, glm::vec3(0.0f));
+		});
+
 	std::vector<std::shared_ptr<Hittable>> meshes_as_hittable;
 	for (auto& a : m_Meshes)
 		meshes_as_hittable.push_back(a);
 
 	// Construct AABBs
-	m_Hittables.push_back(std::make_shared<BoundingBox>(meshes_as_hittable));
+	//m_Hittables = meshes_as_hittable;
+	m_BVH = BVHNode(meshes_as_hittable, 0, meshes_as_hittable.size());
+	std::cout << "Heirarchy Constructed!\n";
 }
 
 Scene::~Scene() {
@@ -75,12 +84,16 @@ bool Scene::Intersect(const Ray& r, HitRecord& rec, float min, float max) const
 {
 	HitRecord local_rec;
 	rec.t = INFINITY;
-	for (const std::shared_ptr<Hittable>& hittable : m_Hittables) {
-		if (hittable->Intersect(r, local_rec, min, max) ) {
-			if (local_rec.t < rec.t) {
-				rec = local_rec;
-			}
+	if (m_BVH.Intersect(r, local_rec, min, max) ) {
+		if (local_rec.t < rec.t) {
+			rec = local_rec;
 		}
 	}
 	return rec.t != INFINITY;
+}
+
+bool Scene::GetBounds(AABB& out) const
+{
+	m_BVH.GetBounds(out);
+	return true;
 }

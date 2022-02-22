@@ -5,10 +5,10 @@
 #include <future>
 #include "Random.h"
 
-const uint32_t MAX_DEPTH = 12;
+const uint32_t MAX_DEPTH = 3;
 const uint32_t THREADS = 8;
-const uint32_t SAMPLES_PER_PIXEL = 512;
-const uint32_t IMG_WIDTH = 128;
+const uint32_t SAMPLES_PER_PIXEL = 256;
+const uint32_t IMG_WIDTH = 1080;
 const float GAMMA = 2;
 
 glm::vec3 rayColour(Ray& r, Scene& scene, int depth = 0) {

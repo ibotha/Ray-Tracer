@@ -8,7 +8,7 @@
 
 Camera::Camera(const aiCamera* camera, aiNode* node)
 {
-	float aperture = 100.0f;
+	float aperture = 0.0f;
 	float focus_dist = 1160.0f;
 	view = (aiGetNodeWorldMatrix(node));
 	FOV = camera->mHorizontalFOV;

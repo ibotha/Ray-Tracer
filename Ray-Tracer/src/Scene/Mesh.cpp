@@ -20,6 +20,11 @@ Mesh::Mesh(aiMesh* mesh, aiNode * node)
         m_Indices.push_back(Face.mIndices[1]);
         m_Indices.push_back(Face.mIndices[2]);
     }
+
+    glm::mat4 inv = glm::inverse(m_Model);
+    glm::vec3 min = glm::vec3(glm::vec4(glm::vec3(-100), 1.0f) * inv);
+    glm::vec3 max = glm::vec3(glm::vec4(glm::vec3(100), 1.0f) * inv);
+    m_AABB = AABB(glm::min(min, max), glm::max(min, max));
 }
 
 float length_squared(glm::vec3 vec) {
@@ -49,5 +54,11 @@ bool Mesh::Intersect(const Ray& r, HitRecord& rec, float min, float max) const
     rec.mIndex = m_MaterialIndex;
     rec.SetNormal(r, glm::normalize(glm::inverse(glm::mat3(m_Model)) * local.At(dist)));
     rec.point = r.At(dist) + (rec.inside ? -rec.normal : rec.normal) * 0.001f;
+    return true;
+}
+
+bool Mesh::GetBounds(AABB& out) const
+{
+    out = m_AABB;
     return true;
 }

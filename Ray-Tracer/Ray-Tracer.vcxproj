@@ -27,8 +27,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\BVH\BVHNode.cpp" />
     <ClCompile Include="src\Random.cpp" />
-    <ClCompile Include="src\Scene\BoundingBox.cpp" />
+    <ClCompile Include="src\Scene\AABB.cpp" />
+    <ClCompile Include="src\Scene\HittableList.cpp" />
     <ClCompile Include="src\Scene\Hittable.cpp" />
     <ClCompile Include="src\Scene\Material.cpp" />
     <ClCompile Include="src\HitRecord.cpp" />
@@ -43,8 +45,10 @@
     <ClCompile Include="src\Ray-Tracer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BVH\BVHNode.hpp" />
     <ClInclude Include="src\Random.h" />
-    <ClInclude Include="src\Scene\BoundingBox.hpp" />
+    <ClInclude Include="src\Scene\AABB.hpp" />
+    <ClInclude Include="src\Scene\HittableList.hpp" />
     <ClInclude Include="src\Scene\Hittable.hpp" />
     <ClInclude Include="src\Scene\Material.h" />
     <ClInclude Include="src\HitRecord.h" />
