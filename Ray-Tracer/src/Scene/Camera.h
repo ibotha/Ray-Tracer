@@ -16,11 +16,15 @@ public:
 
 	float FOV;
 	float AR;
+	float lens_radius;
 	glm::mat4 view;
 	glm::vec3 position;
 	glm::vec3 lower_left_corner;
 	glm::vec3 horizontal;
 	glm::vec3 vertical;
+	glm::vec3 w;
+	glm::vec3 u;
+	glm::vec3 v;
 	std::string name;
 };
 

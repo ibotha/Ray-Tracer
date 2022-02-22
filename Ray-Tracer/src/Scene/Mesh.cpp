@@ -7,7 +7,6 @@
 Mesh::Mesh(aiMesh* mesh, aiNode * node)
 {
     m_Model = glm::inverse(aiGetNodeWorldMatrix(node));
-    std::cout << m_Model << std::endl;
 	m_Vertices.reserve(mesh->mNumVertices);
     m_MaterialIndex = mesh->mMaterialIndex;
 	for (int i = 0; i < mesh->mNumVertices; i++) {

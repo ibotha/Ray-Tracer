@@ -7,8 +7,8 @@
 
 const uint32_t MAX_DEPTH = 12;
 const uint32_t THREADS = 8;
-const uint32_t SAMPLES_PER_PIXEL = 256;
-const uint32_t IMG_WIDTH = 256;
+const uint32_t SAMPLES_PER_PIXEL = 512;
+const uint32_t IMG_WIDTH = 128;
 const float GAMMA = 2;
 
 glm::vec3 rayColour(Ray& r, Scene& scene, int depth = 0) {
@@ -50,8 +50,8 @@ glm::vec3 pixelColour(int x, int y, int width, int height, const Camera& camera,
 
 	for (int s = 0; s < samples_per_pixel; s++) {
 		Ray r = camera.GenerateRay(
-			(x + Random::RandomFloat()) / static_cast<float>(width),
-			(y + Random::RandomFloat()) / static_cast<float>(height));
+			(x + Random::Float()) / static_cast<float>(width),
+			(y + Random::Float()) / static_cast<float>(height));
 		col += rayColour(r, scene);
 	}
 
@@ -80,7 +80,7 @@ void renderScene(const char* sceneName, const char* outName) {
 		auto executor = [&]() -> bool {
 			unsigned int local_i = index++;
 			while (local_i < width * height) {
-				if (local_i % 500 == 0) {
+				if (local_i % 2000 == 0) {
 					std::stringstream ss;
 
 					ss << (local_i * 100) / (width * height) << "%" << std::endl;

@@ -28,6 +28,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Random.cpp" />
+    <ClCompile Include="src\Scene\BoundingBox.cpp" />
+    <ClCompile Include="src\Scene\Hittable.cpp" />
     <ClCompile Include="src\Scene\Material.cpp" />
     <ClCompile Include="src\HitRecord.cpp" />
     <ClCompile Include="src\conversion.cpp" />
@@ -42,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Random.h" />
+    <ClInclude Include="src\Scene\BoundingBox.hpp" />
+    <ClInclude Include="src\Scene\Hittable.hpp" />
     <ClInclude Include="src\Scene\Material.h" />
     <ClInclude Include="src\HitRecord.h" />
     <ClInclude Include="src\print_helpers.h" />

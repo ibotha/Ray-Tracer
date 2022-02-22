@@ -7,8 +7,9 @@
 #include <memory>
 #include <Ray.h>
 #include <HitRecord.h>
+#include "Hittable.hpp"
 
-class Scene
+class Scene: public Hittable
 {
 public:
 	/*Load a scene from a file using Assimp*/
@@ -19,12 +20,13 @@ public:
 	inline const Material& GetMaterial(int i) const {
 		return m_Materials[i];
 	}
-	bool Intersect(const Ray& r, HitRecord& rec, float min, float max) const;
+	virtual bool Intersect(const Ray& r, HitRecord& rec, float min, float max) const;
 
 private:
 	std::vector<Camera> m_Cameras;
-	std::vector<std::unique_ptr<Light>> m_Lights;
-	std::vector<Mesh> m_Meshes;
+	std::vector<std::shared_ptr<Light>> m_Lights;
+	std::vector<std::shared_ptr<Mesh>> m_Meshes;
 	std::vector<Material> m_Materials;
+	std::vector<std::shared_ptr<Hittable>> m_Hittables;
 };
 

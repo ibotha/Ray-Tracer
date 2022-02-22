@@ -5,8 +5,9 @@
 #include <glm/glm.hpp>
 #include <Ray.h>
 #include "HitRecord.h"
+#include "Hittable.hpp"
 
-class Mesh
+class Mesh : public Hittable
 {
 public:
 	Mesh(aiMesh* mesh, aiNode* node);
