@@ -13,6 +13,6 @@ A Ray Tracer made by Isard Botha for fun.
 ![Image of the day|2022 02 21](./Ray-Tracer/output/outCamera220221.png)
 
 #### Full BSDF
-![Full BSDF](./Ray-Tracer/output/outFullBSDF.png)
+![Full BSDF](./Ray-Tracer/output/outFullBSDF.jpeg)
 
 ### 
